@@ -1,5 +1,7 @@
-.global ft_strlen
-.intel_syntax noprefix
+BITS 64
+
+extern ___error
+global ft_strlen
 
 ft_strlen:
 	mov rax, 0

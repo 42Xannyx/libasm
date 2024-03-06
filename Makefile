@@ -23,7 +23,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "Linking..."
-	@ar rcs $@ $(OBJECTS)
+	ar rcs $@ $(OBJ)
 	@echo "Build complete."
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s $(HEADERS)
@@ -35,7 +35,7 @@ $(OBJ_DIR):
 	@mkdir -p $@
 
 test: $(NAME)
-	$(CC) $(CFLAGS) $(OBJ) src/main.c -I$(HEADERS) -o libasm
+	@$(CC) src/main.c $(NAME) -I$(HEADERS)} $(CFLAGS)
 
 clean:
 	@echo "\n"

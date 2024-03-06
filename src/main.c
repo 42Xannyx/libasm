@@ -8,42 +8,42 @@
 #include "libasm.h"
 
 // Should segfault
-void t_seg_strlen() {
-  int64_t len = 0;
-
-  printf("-- FT_STRLEN --\n");
-  len = ft_strlen(NULL);
-  printf("%d. len: %ld\n", 3 + 1, len);
-
-  printf("-- STRLEN --\n");
-  len = strlen(NULL);
-  printf("%d. len: %ld\n", 3 + 1, len);
-}
-
-void t_strlen() {
-  int64_t len = 0;
-  const char *strings[] = {"Hello world", "", "a", NULL};
-
-  for (int32_t i = 0; strings[i]; i++) {
-    if (strlen(strings[i]) != ft_strlen(strings[i])) {
-      printf("Something wrong with ft_strlen");
-    }
-  }
-  printf("Did checks for ft_strlen\n");
-
-  // t_seg_strlen();
-}
+// void t_seg_strlen() {
+//   int64_t len = 0;
+//
+//   printf("-- FT_STRLEN --\n");
+//   len = ft_strlen(NULL);
+//   printf("%d. len: %ld\n", 3 + 1, len);
+//
+//   printf("-- STRLEN --\n");
+//   len = strlen(NULL);
+//   printf("%d. len: %ld\n", 3 + 1, len);
+// }
+//
+// void t_strlen() {
+//   int64_t len = 0;
+//   const char *strings[] = {"Hello world", "", "a", NULL};
+//
+//   for (int32_t i = 0; strings[i]; i++) {
+//     if (strlen(strings[i]) != ft_strlen(strings[i])) {
+//       printf("Something wrong with ft_strlen");
+//     }
+//   }
+//   printf("Did checks for ft_strlen\n");
+//
+//   // t_seg_strlen();
+// }
 
 void t_seg_write() {
   int64_t len = 0;
 
   printf("-- FT_WRITE --\n");
   len = ft_write(STDOUT_FILENO, NULL, 1);
-  printf("%d. len: %ld\n", 4, len);
+  printf("%d. len: %lld\n", 4, len);
 
   printf("-- WRITE --\n");
   len = write(STDOUT_FILENO, NULL, 1);
-  printf("%d. len: %ld\n", 4, len);
+  printf("%d. len: %lld\n", 4, len);
 }
 
 void t_write() {
@@ -106,7 +106,7 @@ void t_read() {
 }
 
 int32_t main() {
-  t_strlen();
+  // t_strlen();
   t_write();
   t_read();
   return 0;

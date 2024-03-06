@@ -1,9 +1,9 @@
 BITS 64
 
 extern ___error
-global _ft_write
+global ft_write
 
-_ft_write:
+ft_write:
 	mov rax, 1
   syscall
   ret

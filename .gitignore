@@ -1,3 +1,4 @@
 obj
 libasm
 *.a
+a.out
