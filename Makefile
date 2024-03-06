@@ -1,5 +1,5 @@
 NAME          = libasm.a
-CFLAGS        = -Wall # -Wextra -Werror
+CFLAGS        = -Wall -Wextra -Werror
 OBJ_DIR       = obj
 SRC_DIR       = src/assembly
 SRC           = $(SRC_DIR)/ft_write.s $(SRC_DIR)/ft_read.s
