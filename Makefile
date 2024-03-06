@@ -1,32 +1,52 @@
-TARGET = libasm
+NAME          = libasm.a
+CFLAGS        = -Wall # -Wextra -Werror
+OBJ_DIR       = obj
+SRC_DIR       = src/assembly
+SRC           = $(SRC_DIR)/ft_write.s $(SRC_DIR)/ft_read.s
+OBJ           = $(SRC:$(SRC_DIR)/%.s=$(OBJ_DIR)/%.o)
+HEADERS       = src/libasm.h
 
-OBJD = objs/
-SRCD = src/
-SRCS_C = main.c
-SRCS_S = functions/ft_strlen.s functions/ft_write.s
-OBJS = $(SRCS_C:%.c=$(OBJD)%.o) $(SRCS_S:%.s=$(OBJD)%.o)
+NASM          = nasm
+NASMFLAGS     = -f elf64 -F dwarf -g -w+all
 
-CFLAGS = -Wall -fPIC
-ASFLAGS =
-GCC = gcc
-AS = as
-RM = rm -rf
+GREEN           = \033[1;32m
+BLUE            = \033[1;36m
+RED             = \033[0;31m
+NC              = \033[0m # No Color
 
-all: $(OBJD) $(TARGET)
+START           = "$(BLUE)---\nStarting...!\n---$(NC)"
+MESSAGE         = "$(BLUE)---\nCompiling done! Run ./$(NAME)\n---$(NC)"
+COMP_MESSAGE    = "$(GREEN)Building C object... $(NC)%-33.33s\r\n"
+REM_MESSAGE     = "$(RED)Removing files...$(NC)"
 
-$(OBJD):
-	@mkdir -p $(OBJD) $(OBJD)functions
+all: $(NAME)
 
-$(OBJD)%.o: $(SRCD)%.c
-	$(GCC) $(CFLAGS) -c $< -o $@
+$(NAME): $(OBJ)
+	@echo "Linking..."
+	@ar rcs $@ $(OBJECTS)
+	@echo "Build complete."
 
-$(OBJD)%.o: $(SRCD)%.s
-	$(AS) $(ASFLAGS) $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s $(HEADERS)
+	@echo "Assembling $<..."
+	@mkdir -p $(OBJ_DIR)
+	$(NASM) ${NASMFLAGS} -o $@ $<
 
-$(TARGET): $(OBJS)
-	$(GCC) $(CFLAGS) -no-pie $^ -o $@
+$(OBJ_DIR):
+	@mkdir -p $@
+
+test: $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) src/main.c -I$(HEADERS) -o libasm
 
 clean:
-	$(RM) $(OBJD) $(TARGET)
+	@echo "\n"
+	@echo $(OBJECTS)
+	@rm -rf $(OBJ_DIR)
+	@printf $(REM_MESSAGE)
+	@echo "\n"
 
-.PHONY: all clean
+fclean: clean
+	@rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

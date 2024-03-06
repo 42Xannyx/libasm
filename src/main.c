@@ -5,9 +5,7 @@
 #include <sys/fcntl.h>
 #include <unistd.h>
 
-extern int64_t ft_strlen(const char *);
-extern ssize_t ft_write(int fildes, const void *buf, size_t nbyte);
-extern ssize_t ft_read(int fildes, void *buf, size_t nbyte);
+#include "libasm.h"
 
 // Should segfault
 void t_seg_strlen() {
@@ -61,7 +59,7 @@ void t_write() {
     len2 = write(STDOUT_FILENO, strings[i], strlen(strings[i]));
 
     if (len1 != len2) {
-      printf("Something wrong with ft_write");
+      printf("Something wrong with ft_write\n");
     }
   }
 
@@ -71,21 +69,36 @@ void t_write() {
 void t_read() {
   ssize_t len1 = 0;
   ssize_t len2 = 0;
-  int32_t fd[3];
-  fd[0] = open("./public/read1.txt", O_RDONLY);
-  fd[1] = open("./public/read2.txt", O_RDONLY);
-  fd[2] = open("./public/read3.txt", O_RDONLY);
-  fd[3] = NULL;
+  char buff1[11];
+  char buff2[11];
+  int32_t fd1[4];
+  int32_t fd2[4];
 
-  for (int32_t i = 0; strings[i]; i++) {
-    printf("-- FT_READ --\n");
-    len1 = ft_read(STDOUT_FILENO, strings[i], strlen(strings[i]));
+  fd1[0] = open("./public/read1.txt", O_RDONLY);
+  fd1[1] = open("./public/read2.txt", O_RDONLY);
+  fd1[2] = open("./public/read3.txt", O_RDONLY);
+  fd1[3] = 0;
+
+  fd2[0] = open("./public/read1.txt", O_RDONLY);
+  fd2[1] = open("./public/read2.txt", O_RDONLY);
+  fd2[2] = open("./public/read3.txt", O_RDONLY);
+  fd1[3] = 0;
+
+  for (int32_t i = 0; fd1[i] != 0; i++) {
 
     printf("-- READ --\n");
-    len2 = read(STDOUT_FILENO, strings[i], strlen(strings[i]));
+    len2 = read(fd1[i], buff1, 10);
+    printf("%s\n", buff1);
+
+    printf("-- FT_READ --\n");
+    len1 = ft_read(fd2[i], buff2, 10);
+    printf("%s\n", buff2);
+
 
     if (len1 != len2) {
-      printf("Something wrong with ft_write");
+      printf("Something wrong with ft_read\n");
+    } else if (strcmp(buff1, buff2) != 0) {
+      printf("Something wrong with ft_read\n");
     }
   }
 
