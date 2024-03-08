@@ -57,7 +57,7 @@ void t_write() {
 void t_read() {
   ssize_t len1 = 0, len2 = 0;
   char buff1[12], buff2[12];
-  int32_t fd1[4], fd2[4]; 
+  int32_t fd1[4], fd2[4];
 
   fd1[0] = open("./public/read1.txt", O_RDONLY);
   fd1[1] = open("./public/read2.txt", O_RDONLY);
@@ -107,9 +107,32 @@ void t_read() {
   }
 }
 
+void t_strcmp() {
+  char tulip[7][2][12] = {{"Hello World", "Hello World"},
+                          {"HelloWorl", "Hello World"},
+                          {"Hello World", "Hello Worl"},
+                          {"", ""},
+                          {"      ", "      "},
+                          {"aaaa", "aaaaa"},
+                          {"1", ""}};
+
+  for (int32_t i = 0; i < 7; i++) {
+    printf("Comparing %s - %s\n", tulip[i][0], tulip[i][1]);
+    int32_t ret1 = ft_strcmp(tulip[i][0], tulip[i][1]);
+    int32_t ret2 = strcmp(tulip[i][0], tulip[i][1]);
+
+    printf("%d - %d\n", ret1, ret2);
+    if (ret1 != ret2) {
+      printf("Something wrong with ft_strcmp\n");
+      exit(1);
+    }
+  }
+}
+
 int32_t main() {
   t_strlen();
   t_write();
   t_read();
+  t_strcmp();
   return 0;
 }

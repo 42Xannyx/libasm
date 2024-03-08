@@ -17,9 +17,9 @@
 ** prototype base
 */
 
-unsigned long ft_strlen(const char *str);
+size_t ft_strlen(const char *str);
 // char *ft_strcpy(char *dst, const char *src);
-// int ft_strcmp(const char *s1, const char *s2);
+int32_t ft_strcmp(const char *s1, const char *s2);
 ssize_t ft_write(int32_t fd, const void *buff, size_t nbyte);
 ssize_t ft_read(int32_t fd, void *buff, size_t nbyte);
 // char *ft_strdup(const char *s);
