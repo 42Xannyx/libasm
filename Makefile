@@ -1,11 +1,16 @@
 NAME          = libasm.a
 CFLAGS        = -Wall -Wextra -Werror
+
 OBJ_DIR       = obj
-SRC_DIR       = src/assembly
-SRC_DIR       = src/assembly/bonus
+SRC_DIR       = src/assembly/core
+BONUS_DIR     = src/assembly/bonus
+
 SRC           = $(SRC_DIR)/ft_write.s $(SRC_DIR)/ft_read.s $(SRC_DIR)/ft_strlen.s $(SRC_DIR)/ft_strcmp.s $(SRC_DIR)/ft_strdup.s $(SRC_DIR)/ft_strcpy.s
-BONUS					= $(SRC_DIR)
-OBJ           = $(SRC:$(SRC_DIR)/%.s=$(OBJ_DIR)/%.o)
+BONUS					= $(BONUS_DIR)/ft_atoi_base.s
+
+OBJ           = $(SRC:.s=.o)
+OBJ_BONUS     = $(BONUS:.s=.o)
+
 HEADERS       = src/libasm.h
 
 NASM          = nasm
@@ -28,7 +33,12 @@ $(NAME): $(OBJ)
 	ar rcs $@ $(OBJ)
 	@echo "Build complete."
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s $(HEADERS)
+bonus: $(OBJ) $(OBJ_BONUS)
+	@echo "Linking..."
+	ar rcs $(NAME) $(OBJ) $(OBJ_BONUS)
+	@echo "Build complete."
+
+%.o: %.s
 	@echo "Assembling $<..."
 	@mkdir -p $(OBJ_DIR)
 	$(NASM) ${NASMFLAGS} -o $@ $<
@@ -36,7 +46,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s $(HEADERS)
 $(OBJ_DIR):
 	@mkdir -p $@
 
-test: $(NAME)
+test: $(NAME) bonus 
 	@$(CC) src/main.c $(NAME) -I$(HEADERS)} $(CFLAGS)
 
 clean:
