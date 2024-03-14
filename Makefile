@@ -2,7 +2,9 @@ NAME          = libasm.a
 CFLAGS        = -Wall -Wextra -Werror
 OBJ_DIR       = obj
 SRC_DIR       = src/assembly
-SRC           = $(SRC_DIR)/ft_write.s $(SRC_DIR)/ft_read.s $(SRC_DIR)/ft_strlen.s $(SRC_DIR)/ft_strcmp.s
+SRC_DIR       = src/assembly/bonus
+SRC           = $(SRC_DIR)/ft_write.s $(SRC_DIR)/ft_read.s $(SRC_DIR)/ft_strlen.s $(SRC_DIR)/ft_strcmp.s $(SRC_DIR)/ft_strdup.s $(SRC_DIR)/ft_strcpy.s
+BONUS					= $(SRC_DIR)
 OBJ           = $(SRC:$(SRC_DIR)/%.s=$(OBJ_DIR)/%.o)
 HEADERS       = src/libasm.h
 
