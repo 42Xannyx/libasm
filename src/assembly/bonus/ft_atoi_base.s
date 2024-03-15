@@ -1,22 +1,63 @@
 BITS 64
 
-extern __errno_location
-
 section .text
-  global ft_read
+  global ft_atoi_base
 
-ft_read:
-	mov rax, 0
-  syscall
-  cmp rax, 0
-  jl error
-  ret
+; rdi == int8_t *str
+; rsi == int32_t base
 
-error:
-  neg rax 
-  push rax
-  call __errno_location WRT ..plt
-  pop rdi
-  mov [rax], edi
-  mov rax, -1
+ft_atoi_base:
+  mov rcx, 0
+  mov rax, 0
+  mov r8, 1
+
+  jmp skip_whitespace
+
+skip_whitespace:
+  movzx rdx, byte [rdi + rcx]
+
+  cmp rdx, 33                
+  jle skip_non_whitespace     
+
+  jmp is_minus                      
+
+skip_non_whitespace:
+  inc rcx                     
+  jmp skip_whitespace        
+
+is_minus:
+  cmp byte [rdi], '-'
+  jne is_plus
+
+  inc rcx
+  mov r8, -1
+
+  jmp is_plus
+
+is_plus:
+  cmp byte [rdi], '+'
+  jne l1 
+  inc rcx
+
+  jmp l1
+
+l1:
+  movzx rdx, byte [rdi + rcx]
+  cmp rdx, 0
+  je end
+
+  cmp rdx, '0'
+  jl end ; str[i] < '0'
+  cmp rdx, '9'
+  jg end ; str[i] > '9'
+  
+  sub rdx, '0'
+  imul rax, rsi
+  add rax, rdx 
+
+  inc rcx
+  jmp l1
+
+end:
+  imul rax, r8
   ret

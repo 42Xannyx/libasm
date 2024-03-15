@@ -49,6 +49,9 @@ $(OBJ_DIR):
 test: $(NAME) bonus 
 	@$(CC) src/main.c $(NAME) -I$(HEADERS)} $(CFLAGS)
 
+test_bonus: $(NAME) bonus 
+	@$(CC) src/bonus.c $(NAME) -I$(HEADERS)} $(CFLAGS)
+
 clean:
 	@echo "\n"
 	@echo $(OBJECTS)

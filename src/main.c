@@ -45,7 +45,7 @@ void test_strlen() {
 }
 
 void test_write() {
-  ssize_t len1 = 0, len2 = 0;
+  ssize_t len1 = 0; 
   const char *strings[] = {"Hello world\n", "", "a\n", NULL};
   int32_t fd_ft_write =
       open("./public/output_ft_write.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -78,11 +78,6 @@ void test_write() {
   errno = 0;
   len1 = ft_write(-1, "test", 4);
   assert(len1 == -1);
-  assert(errno == EBADF);
-
-  errno = 0;
-  len2 = write(-1, "test", 4);
-  assert(len2 == -1);
   assert(errno == EBADF);
 
   printf("All tests passed of ft_strlen.\n");
@@ -151,7 +146,7 @@ void test_read() {
 }
 
 void test_strcmp() {
-  char tulip[14][2][50] = {{"Hello World", "Hello World"},
+  char tulip[15][2][50] = {{"Hello World", "Hello World"},
                            {"HelloWorl", "Hello World"},
                            {"Hello World", "Hello Worl"},
                            {"", ""},
@@ -159,13 +154,13 @@ void test_strcmp() {
                            {"aaaa", "aaaaa"},
                            {"1", ""},
                            {"\0", "\0"},
+                           {"Hello\200", "Hello\300"},
                            {"Hello\nWorld", "Hello\nWorld"},
                            {"hello", "Hello"},
                            {"  leading space", "  leading space"},
                            {"trailing space ", "trailing space "},
                            {"🌍 unicode 🌎", "🌍 unicode 🌎"},
-                           {"ABC\0DEF", "ABC\0DEG"}
-};
+                           {"ABC\0DEF", "ABC\0DEG"}};
 
   for (int32_t i = 0; i < 7; i++) {
     int32_t ret1 = ft_strcmp(tulip[i][0], tulip[i][1]);
@@ -216,7 +211,7 @@ void test_strcpy() {
   // Test 3: Copy a string with whitespaces.
   ft_strcpy(dest, "   ");
   assert(strcmp(dest, "   ") == 0);
-  assert(dest[3] == '\0'); 
+  assert(dest[3] == '\0');
 
   // Test 4: Overlapping source and destination (if your implementation supports
   // it).
@@ -234,5 +229,6 @@ int32_t main() {
   test_strcmp();
   test_strdup();
   test_strcpy();
+
   return 0;
 }
