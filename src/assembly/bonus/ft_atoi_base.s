@@ -3,39 +3,12 @@
 	section .text
 	global  ft_atoi_base
 
-	; From the Piscine Subject:
-	
-	; • Write a function that converts the initial portion
-	; of the string pointed to by str to an integer representation.
-	
-	; • The str input string is interpreted in a specific base given
-	; as a second parameter.
-	
-	; • Except for the base rule, the function should work exactly
-	; like the standard ft_atoi function.
-	
-	; • If there’s an invalid argument, the function should return 0.
-	
-	; Examples of invalid arguments:
-	
-	; • The base is empty or has a size of 1.
-	
-	; • The base contains the same character twice.
-	
-	; • The base contains '+' or '-' or whitespaces.
-
-	; rdi == char *str
-	; rsi == char *base
-
-	; Logic
-	; 1. Check if rsi (base) is correct
-	; 2. Skip whitespaces, minus & plus
-	; 3. Go through rdi (str) and make string and number
+	; -------------------------
 
 ft_atoi_base:
 	;   Initialize registers
 	xor rax, rax; Result
-	xor rcx, rcx; Index
+	xor rcx, rcx; Index for str
 	xor r8, r8; Base length
 	mov r9, 1; Sign (1 for positive, -1 for negative)
 
@@ -65,35 +38,41 @@ check_duplicate:
 	jz    next_base_char
 	cmp   rbx, rdx
 	je    error
-	jmp   check_duplicate
+
+	jmp check_duplicate
 
 next_base_char:
 	inc r8
 	jmp validate_base
+
+	; -------------------------
 
 base_validated:
 	;   Base must have at least 2 characters
 	cmp r8, 2
 	jb  error
 
-	;   Skip leading whitespaces
-	mov rdi, rdi; Ensure rdi points to the string
+	; Skip leading whitespaces
 
 skip_whitespaces:
 	movzx rdx, BYTE [rdi + rcx]
-	cmp   rdx, ' '
-	je    increment_index
-	cmp   rdx, '\t'
-	je    increment_index
-	cmp   rdx, '\n'
-	je    increment_index
-	cmp   rdx, '\v'
-	je    increment_index
-	cmp   rdx, '\f'
-	je    increment_index
-	cmp   rdx, '\r'
-	je    increment_index
-	jmp   check_sign
+
+	cmp rdx, ' '
+	je  increment_index
+	cmp rdx, '\t'
+	je  increment_index
+	cmp rdx, '\n'
+	je  increment_index
+	cmp rdx, '\v'
+	je  increment_index
+	cmp rdx, '\f'
+	je  increment_index
+	cmp rdx, '\r'
+	je  increment_index
+
+	jmp check_sign
+
+	; -------------------------
 
 increment_index:
 	inc rcx
