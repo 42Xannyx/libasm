@@ -174,7 +174,7 @@ void test_strcmp() {
 
 void test_strdup() {
   // Test 1: Check empty string.
-  char *result = strdup("");
+  char *result = ft_strdup("");
 
   assert(result != NULL && result[0] == '\0');
   free(result);
@@ -185,14 +185,14 @@ void test_strdup() {
 
   assert(result != NULL && strcmp(result, str) == 0);
 
-  // // Test 3: Check that the duplicate is a separate copy.
+  // // // Test 3: Check that the duplicate is a separate copy.
   if (result != NULL) {
     result[0] = 'J';
     assert(str[0] != result[0]);
     free(result);
   }
 
-  // Test 4: Check normal string duplication.
+  // // Test 4: Check normal string duplication.
   result = ft_strdup("!");
 
   assert(result != NULL && strcmp(result, "!") == 0);
@@ -218,7 +218,6 @@ void test_strcpy() {
   assert(strcmp(dest, "   ") == 0);
   assert(dest[3] == '\0');
 
-  // FIX
   // Test 4: Overlapping source and destination (if your implementation supports
   // it).
   // ft_strcpy(dest, "Overlap");

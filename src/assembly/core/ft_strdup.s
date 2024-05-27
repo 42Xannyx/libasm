@@ -14,14 +14,11 @@ ft_strdup:
 	;   Move the first byte to r8 and check if null
 	mov r8, rdi
 	cmp BYTE [r8], 0
-	jz  end
+	je  empty_string
 
 	;    Call ft_strlen, if empty jump to empty_string, else move to rdi
 	push r8
 	call ft_strlen
-
-	cmp rax, 0
-	je  empty_string
 
 	inc rax
 	mov rdi, rax
@@ -40,6 +37,8 @@ ft_strdup:
 	ret
 
 empty_string:
+	mov rdi, 1
+
 	;    Calling malloc & check if the allocation was succesfull
 	;    www.stackoverflow.com/questions/36007975/compile-error-relocation-r-x86-64-pc32-against-undefined-symbol
 	call malloc WRT ..plt
