@@ -4,24 +4,24 @@
 	global  ft_atoi_base
 
 	; From the Piscine Subject:
-
+	
 	; • Write a function that converts the initial portion
 	; of the string pointed to by str to an integer representation.
-
+	
 	; • The str input string is interpreted in a specific base given
 	; as a second parameter.
-
+	
 	; • Except for the base rule, the function should work exactly
 	; like the standard ft_atoi function.
-
+	
 	; • If there’s an invalid argument, the function should return 0.
-
+	
 	; Examples of invalid arguments:
-
+	
 	; • The base is empty or has a size of 1.
-
+	
 	; • The base contains the same character twice.
-
+	
 	; • The base contains '+' or '-' or whitespaces.
 
 	; rdi == char *str
@@ -33,112 +33,114 @@
 	; 3. Go through rdi (str) and make string and number
 
 ft_atoi_base:
-	;   Give the correct values for each variable
-	xor rcx, rcx
-	xor rax, rax
-	mov r8, 1
-	xor r9, r9
+	;   Initialize registers
+	xor rax, rax; Result
+	xor rcx, rcx; Index
+	xor r8, r8; Base length
+	mov r9, 1; Sign (1 for positive, -1 for negative)
 
-	jmp l2
+	;   Validate base
+	mov r10, rsi; Pointer to base
 
-skip_whitespace:
-	movzx rdx, BYTE [rdi + rcx]
+validate_base:
+	movzx rdx, BYTE [r10 + r8]
+	test  rdx, rdx
+	jz    base_validated
 
-	cmp rdx, 33
-	jle increment_whitespace
-
-	jmp is_minus
-
-increment_whitespace:
-	inc rcx
-	jmp skip_whitespace
-
-is_minus:
-	cmp BYTE [rdi], '-'
-	jne is_plus
-
-	inc rcx
-	mov r8, -1
-
-	jmp is_plus
-
-is_plus:
-	cmp byte [rdi], '+'
-	jne l1
-
-	inc rcx
-	jmp l1
-
-convert_char:
-	;    Add to current result
-	;    rax = (rax * 10) + (rdx - '0')
-	sub  rdx, r10
-	imul rax, 10
-	add  rax, rdx
-
-	xor r10, r10
-	mov r9, 0
-	inc rcx
-	jmp l1
-
-l3:
-	;     convert_char loops through rsi to check if rdx does not have an invalid char
-	movzx r10, BYTE [rsi + r9]
-	cmp   rdx, r10
-	je    convert_char
-
-	cmp BYTE [rsi + r9], 0
-	je  error
-
-	inc r9
-	jmp l3
-
-l1:
-	;     l1 loops through rdi
-	movzx rdx, BYTE [rdi + rcx]
-
-	;   Check if end of string
-	cmp rdx, 0
-	je  end
-
-	;   Check if string is a non-digit
-	cmp rdx, '0'
-	jl  end; str[i] < '0'
-	cmp rdx, '9'
-	jg  end; str[i] > '9'
-
-	jmp l3
-
-l2:
-	;     l2 loops through rsi to find out if `base` is valid
-	movzx rdx, BYTE [rsi + rcx]
-
-	;   Compare to ' '
+	;   Check for invalid characters in base
 	cmp rdx, ' '
 	je  error
-
-	;   Compare to '-'
+	cmp rdx, '+'
+	je  error
 	cmp rdx, '-'
 	je  error
 
-	;   Compare to '+'
-	cmp rdx, '+'
-	je  error
+	;   Check for duplicate characters in base
+	mov r11, r10
 
-	cmp rdx, 0
-	je  reset
+check_duplicate:
+	inc   r11
+	movzx rbx, BYTE [r11]
+	test  rbx, rbx
+	jz    next_base_char
+	cmp   rbx, rdx
+	je    error
+	jmp   check_duplicate
 
+next_base_char:
+	inc r8
+	jmp validate_base
+
+base_validated:
+	;   Base must have at least 2 characters
+	cmp r8, 2
+	jb  error
+
+	;   Skip leading whitespaces
+	mov rdi, rdi; Ensure rdi points to the string
+
+skip_whitespaces:
+	movzx rdx, BYTE [rdi + rcx]
+	cmp   rdx, ' '
+	je    increment_index
+	cmp   rdx, '\t'
+	je    increment_index
+	cmp   rdx, '\n'
+	je    increment_index
+	cmp   rdx, '\v'
+	je    increment_index
+	cmp   rdx, '\f'
+	je    increment_index
+	cmp   rdx, '\r'
+	je    increment_index
+	jmp   check_sign
+
+increment_index:
 	inc rcx
-	jmp l2
+	jmp skip_whitespaces
 
-reset:
-	mov rcx, 0
-	jmp skip_whitespace
+check_sign:
+	movzx rdx, BYTE [rdi + rcx]
+	cmp   rdx, '-'
+	je    set_negative
+	cmp   rdx, '+'
+	je    increment_index
+	jmp   convert_loop
 
-error:
-	mov rax, -1
+set_negative:
+	mov r9, -1
+	inc rcx
+	jmp convert_loop
+
+convert_loop:
+	movzx rdx, BYTE [rdi + rcx]
+	test  rdx, rdx
+	jz    end_conversion
+
+	;   Find the character in the base
+	xor r11, r11
+
+find_char_in_base:
+	movzx rbx, BYTE [rsi + r11]
+	test  rbx, rbx
+	jz    end_conversion
+	cmp   rdx, rbx
+	je    valid_char_found
+	inc   r11
+	jmp   find_char_in_base
+
+valid_char_found:
+	;    Update the result
+	imul rax, r8
+	add  rax, r11
+	inc  rcx
+	jmp  convert_loop
+
+end_conversion:
+	;    Apply the sign
+	imul rax, r9
 	ret
 
-end:
-	imul rax, r8
+error:
+	xor rax, rax
 	ret
