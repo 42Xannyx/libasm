@@ -1,43 +1,63 @@
-BITS 64
+	BITS 64
 
-extern __errno_location
-extern ft_strlen
-extern ft_strcpy
-extern malloc
-;
-section .text
-  global ft_strdup
-;
+	extern __errno_location
+	extern ft_strlen
+	extern ft_strcpy
+	extern malloc
+
+	section .text
+	global  ft_strdup
+
 ft_strdup:
-  xor rdx, rdx
+	xor rdx, rdx
 
-  mov r8, rdi
-  cmp BYTE [r8], 0
-  je end
+	;   Move the first byte to r8 and check if null
+	mov r8, rdi
+	cmp BYTE [r8], 0
+	jz  end
 
-  push r8
-  call ft_strlen
-  inc rax
-  mov rdi, rax
+	;    Call ft_strlen, if empty jump to empty_string, else move to rdi
+	push r8
+	call ft_strlen
 
-  call malloc WRT ..plt ; https://stackoverflow.com/questions/36007975/compile-error-relocation-r-x86-64-pc32-against-undefined-symbol
-  cmp rax, 0
-  je error 
+	cmp rax, 0
+	je  empty_string
 
-  mov rdi, rax
-  pop rsi
-  call ft_strcpy
+	inc rax
+	mov rdi, rax
 
-  ret
+	;    Calling malloc & check if the allocation was succesfull
+	;    www.stackoverflow.com/questions/36007975/compile-error-relocation-r-x86-64-pc32-against-undefined-symbol
+	call malloc WRT ..plt
+	cmp  rax, 0
+	je   error
+
+	;    Moving the allocation to RDI to then copy it to RSI
+	mov  rdi, rax
+	pop  rsi
+	call ft_strcpy
+
+	ret
+
+empty_string:
+	;    Calling malloc & check if the allocation was succesfull
+	;    www.stackoverflow.com/questions/36007975/compile-error-relocation-r-x86-64-pc32-against-undefined-symbol
+	call malloc WRT ..plt
+	cmp  rax, 0
+	je   error
+
+	mov BYTE [rax], 0
+
+	ret
 
 error:
-  neg rax 
-  push rax
-  call __errno_location WRT ..plt
-  pop rdi
-  mov [rax], edi
-  mov rax, -1
-  ret
+	neg  rax
+	push rax
+	call __errno_location WRT ..plt
+	pop  rdi
+	mov  [rax], edi
+	mov  rax, -1
+	ret
 
 end:
-  ret
+	ret

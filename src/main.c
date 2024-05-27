@@ -175,7 +175,8 @@ void test_strcmp() {
 void test_strdup() {
   // Test 1: Check empty string.
   char *result = strdup("");
-  // assert(result != NULL && result[0] == '\0');
+
+  assert(result != NULL && result[0] == '\0');
   free(result);
 
   // Test 2: Check normal string duplication.
@@ -183,20 +184,19 @@ void test_strdup() {
   result = ft_strdup(str);
 
   assert(result != NULL && strcmp(result, str) == 0);
-  free(result);
 
   // // Test 3: Check that the duplicate is a separate copy.
-  // if (result != NULL) {
-  //   result[0] = 'J';
-  //   assert(str[0] != result[0]);
-  //   free(result);
-  // }
+  if (result != NULL) {
+    result[0] = 'J';
+    assert(str[0] != result[0]);
+    free(result);
+  }
 
   // Test 4: Check normal string duplication.
-  // result = ft_strdup("!");
-  //
-  // assert(result != NULL && strcmp(result, "!") == 0);
-  // free(result);
+  result = ft_strdup("!");
+
+  assert(result != NULL && strcmp(result, "!") == 0);
+  free(result);
 
   printf("All tests passed of ft_strdup.\n");
 }
