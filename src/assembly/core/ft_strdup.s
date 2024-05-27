@@ -55,7 +55,7 @@ error:
 	call __errno_location WRT ..plt
 	pop  rdi
 	mov  [rax], edi
-	mov  rax, -1
+	mov  rax, 0
 	ret
 
 end:

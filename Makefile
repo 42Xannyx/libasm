@@ -35,7 +35,7 @@ $(NAME): $(OBJ)
 
 bonus: $(OBJ) $(OBJ_BONUS)
 	@echo "Linking..."
-	ar rcs $(NAME) $(OBJ) $(OBJ_BONUS)
+	ar rcs $(NAME) $(OBJ) $(OBJ_BONUS) 
 	@echo "Build complete."
 
 %.o: %.s
@@ -46,11 +46,11 @@ bonus: $(OBJ) $(OBJ_BONUS)
 $(OBJ_DIR):
 	@mkdir -p $@
 
-test: $(NAME) bonus 
+test: $(NAME)  
 	@$(CC) src/main.c $(NAME) -I$(HEADERS)} $(CFLAGS)
 
 test_bonus: $(NAME) bonus 
-	@$(CC) src/bonus.c $(NAME) -I$(HEADERS)} $(CFLAGS)
+	@$(CC) src/bonus.c $(NAME) -I$(HEADERS)} $(CFLAGS) -DBONUS=1
 
 clean:
 	@echo "\n"
