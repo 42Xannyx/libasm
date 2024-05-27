@@ -27,13 +27,19 @@
 	; rdi == char *str
 	; rsi == char *base
 
+	; Logic
+	; 1. Check if rsi (base) is correct
+	; 2. Skip whitespaces, minus & plus
+	; 3. Go through rdi (str) and make string and number
+
 ft_atoi_base:
 	;   Give the correct values for each variable
 	xor rcx, rcx
 	xor rax, rax
 	mov r8, 1
+	xor r9, r9
 
-	jmp skip_whitespace
+	jmp l2
 
 skip_whitespace:
 	movzx rdx, BYTE [rdi + rcx]
@@ -61,7 +67,31 @@ is_plus:
 	jne l1
 
 	inc rcx
-	jmp reset_to_l2
+	jmp l1
+
+convert_char:
+	;    Add to current result
+	;    rax = (rax * 10) + (rdx - '0')
+	sub  rdx, r10
+	imul rax, 10
+	add  rax, rdx
+
+	xor r10, r10
+	mov r9, 0
+	inc rcx
+	jmp l1
+
+l3:
+	;     convert_char loops through rsi to check if rdx does not have an invalid char
+	movzx r10, BYTE [rsi + r9]
+	cmp   rdx, r10
+	je    convert_char
+
+	cmp BYTE [rsi + r9], 0
+	je  error
+
+	inc r9
+	jmp l3
 
 l1:
 	;     l1 loops through rdi
@@ -77,14 +107,7 @@ l1:
 	cmp rdx, '9'
 	jg  end; str[i] > '9'
 
-	;    Add to current result
-	;    rax = rax * 10 + (rdx - '0')
-	sub  rdx, '0'
-	imul rax, 10
-	add  rax, rdx
-
-	inc rcx
-	jmp l1
+	jmp l3
 
 l2:
 	;     l2 loops through rsi to find out if `base` is valid
@@ -92,31 +115,27 @@ l2:
 
 	;   Compare to ' '
 	cmp rdx, ' '
-	je  error_base
+	je  error
 
 	;   Compare to '-'
 	cmp rdx, '-'
-	je  error_base
+	je  error
 
 	;   Compare to '+'
 	cmp rdx, '+'
-	je  error_base
+	je  error
 
 	cmp rdx, 0
-	je  reset_to_l1
+	je  reset
 
 	inc rcx
 	jmp l2
 
-reset_to_l1:
+reset:
 	mov rcx, 0
-	jmp l1
+	jmp skip_whitespace
 
-reset_to_l2:
-	mov rcx, 0
-	jmp l2
-
-error_base:
+error:
 	mov rax, -1
 	ret
 
