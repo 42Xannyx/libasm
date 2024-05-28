@@ -138,27 +138,35 @@ increment_index_sign:
 
 convert_loop:
 	movzx rdx, BYTE [rdi + rcx]
-	test  rdx, rdx
-	jz    end_conversion
+	cmp   rdx, 0
+	je    end_conversion
 
 	;   Find the character in the base
 	xor r11, r11
 
 find_char_in_base:
 	movzx rbx, BYTE [rsi + r11]
-	test  rbx, rbx
-	jz    end_conversion
-	cmp   rdx, rbx
-	je    valid_char_found
-	inc   r11
-	jmp   find_char_in_base
+	cmp   rbx, 0
+	je    end_conversion
+
+	cmp rdx, rbx
+	je  valid_char_found
+
+	inc r11
+	jmp find_char_in_base
 
 valid_char_found:
-	;    Update the result
+	; Update the result
+	; The formula is: result = result * base_length + digit_value
+	; rax = result
+	; r8  = base_length (length of the base string)
+	; r11 = digit_value (numeric value of the current character in the base string)
+
 	imul rax, r8
 	add  rax, r11
 	inc  rcx
-	jmp  convert_loop
+
+	jmp convert_loop
 
 end_conversion:
 	;    Apply the sign

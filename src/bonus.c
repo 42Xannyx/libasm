@@ -7,7 +7,6 @@
 
 void test_atoi_base() {
   // Test 1: Basic conversion with base 10
-
   assert(ft_atoi_base("42", "0123456789") == 42);
   assert(ft_atoi_base("0", "0123456789") == 0);
 
