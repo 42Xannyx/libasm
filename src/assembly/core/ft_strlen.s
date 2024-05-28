@@ -1,6 +1,6 @@
-BITS 64
+	BITS 64
 
-global ft_strlen
+	global ft_strlen
 
 ft_strlen:
 	mov rax, 0
