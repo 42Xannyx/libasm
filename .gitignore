@@ -3,3 +3,5 @@ libasm
 *.a
 a.out
 *.o
+
+mlibasm_tester/
