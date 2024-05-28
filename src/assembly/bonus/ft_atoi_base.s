@@ -42,10 +42,15 @@ ft_atoi_base:
 	;   Validate base
 	mov r10, rsi; Pointer to base
 
+	; -----------------------
+	; Logic of validate_base
+	; 1. RDX is a char of rsi, and checks if it has any whitespace, minus or plus has
+	; 2. Iterate through each character to find a duplicate.
+
 validate_base:
-	movzx rdx, BYTE [r10 + r8]
-	test  rdx, rdx
-	jz    base_validated
+	movzx rdx, BYTE [rsi + r8]
+	cmp   rdx, 0
+	je    base_validated
 
 	;   Check for invalid characters in base
 	cmp rdx, ' '
@@ -55,16 +60,18 @@ validate_base:
 	cmp rdx, '-'
 	je  error
 
-	;   Check for duplicate characters in base
-	mov r11, r10
+	mov r11, r8
 
 check_duplicate:
-	inc   r11
-	movzx rbx, BYTE [r11]
-	test  rbx, rbx
-	jz    next_base_char
-	cmp   rbx, rdx
-	je    error
+	inc r11
+
+	;     If we finish going through the the string of base, we go to the next char of RDX
+	movzx rbx, BYTE [rsi + r11]
+	cmp   rbx, 0
+	je    next_base_char
+
+	cmp rbx, rdx
+	je  error
 
 	jmp check_duplicate
 
@@ -79,44 +86,55 @@ base_validated:
 	cmp r8, 2
 	jb  error
 
-	; Skip leading whitespaces
-
 skip_whitespaces:
+	;     Skip leading whitespaces
 	movzx rdx, BYTE [rdi + rcx]
 
 	cmp rdx, ' '
-	je  increment_index
+	je  increment_index_whitespace
 	cmp rdx, '\t'
-	je  increment_index
+	je  increment_index_whitespace
 	cmp rdx, '\n'
-	je  increment_index
+	je  increment_index_whitespace
 	cmp rdx, '\v'
-	je  increment_index
+	je  increment_index_whitespace
 	cmp rdx, '\f'
-	je  increment_index
+	je  increment_index_whitespace
 	cmp rdx, '\r'
-	je  increment_index
+	je  increment_index_whitespace
 
 	jmp check_sign
 
-	; -------------------------
-
-increment_index:
+increment_index_whitespace:
 	inc rcx
 	jmp skip_whitespaces
 
+	; -------------------------
+
 check_sign:
 	movzx rdx, BYTE [rdi + rcx]
-	cmp   rdx, '-'
-	je    set_negative
-	cmp   rdx, '+'
-	je    increment_index
-	jmp   convert_loop
+
+	cmp rdx, '-'
+	je  set_negative
+
+	cmp rdx, '+'
+	je  increment_index_sign
+
+	jmp convert_loop
 
 set_negative:
+	;   If there is a minus, make it negative
 	mov r9, -1
 	inc rcx
+
 	jmp convert_loop
+
+increment_index_sign:
+	;   If there is a plus, skip it and go to convert_loop
+	inc rcx
+	jmp convert_loop
+
+	; -------------------------
 
 convert_loop:
 	movzx rdx, BYTE [rdi + rcx]
@@ -148,5 +166,5 @@ end_conversion:
 	ret
 
 error:
-	xor rax, rax
+	mov rax, 0
 	ret
