@@ -12,12 +12,11 @@ ft_strdup:
 	xor rdx, rdx
 
 	;   Move the first byte to r8 and check if null
-	mov r8, rdi
-	cmp BYTE [r8], 0
+	cmp BYTE [rdi], 0
 	je  empty_string
 
 	;    Call ft_strlen, if empty jump to empty_string, else move to rdi
-	push r8
+	push rdi
 	call ft_strlen
 
 	inc rax
@@ -50,12 +49,13 @@ empty_string:
 	ret
 
 error:
-	neg  rax
 	push rax
 	call __errno_location WRT ..plt
-	pop  rdi
-	mov  [rax], edi
-	mov  rax, 0
+
+	mov QWORD [rax], 12
+
+	pop rax
+	pop rsi
 	ret
 
 end:
