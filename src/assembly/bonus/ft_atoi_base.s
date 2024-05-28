@@ -92,15 +92,15 @@ skip_whitespaces:
 
 	cmp rdx, ' '
 	je  increment_index_whitespace
-	cmp rdx, '\t'
+	cmp rdx, 9
 	je  increment_index_whitespace
-	cmp rdx, '\n'
+	cmp rdx, 10
 	je  increment_index_whitespace
-	cmp rdx, '\v'
+	cmp rdx, 11
 	je  increment_index_whitespace
-	cmp rdx, '\f'
+	cmp rdx, 12
 	je  increment_index_whitespace
-	cmp rdx, '\r'
+	cmp rdx, 13
 	je  increment_index_whitespace
 
 	jmp check_sign
