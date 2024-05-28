@@ -127,8 +127,69 @@ void test_atoi_base() {
   printf("All ft_atoi_base tests passed.\n");
 }
 
+void test_list_size() {
+  // Test 1: Empty list
+  t_list *empty_list = NULL;
+  assert(ft_list_size(empty_list) == 0);
+
+  // Test 2: Single element list
+  t_list *single_element_list = malloc(sizeof(t_list));
+
+  single_element_list->data = NULL;
+  single_element_list->next = NULL;
+  assert(ft_list_size(single_element_list) == 1);
+  free(single_element_list);
+
+  // Test 3: Multiple elements list
+  t_list *multiple_elements_list = malloc(sizeof(t_list));
+
+  multiple_elements_list->data = NULL;
+  multiple_elements_list->next = malloc(sizeof(t_list));
+  multiple_elements_list->next->data = NULL;
+  multiple_elements_list->next->next = malloc(sizeof(t_list));
+  multiple_elements_list->next->next->data = NULL;
+  multiple_elements_list->next->next->next = NULL;
+  assert(ft_list_size(multiple_elements_list) == 3);
+  free(multiple_elements_list->next->next);
+  free(multiple_elements_list->next);
+  free(multiple_elements_list);
+
+  // Test 4: Large list
+  int32_t large_size = 1000;
+  t_list *large_list = malloc(sizeof(t_list));
+  if (!large_list) {
+    exit(EXIT_FAILURE);
+  }
+
+  t_list *current = large_list;
+  t_list *next;
+
+  large_list->data = NULL;
+  for (int i = 1; i < large_size; i++) {
+    current->next = malloc(sizeof(t_list));
+    if (!current->next) {
+      exit(EXIT_FAILURE);
+    }
+
+    current = current->next;
+    current->data = NULL;
+  }
+  current->next = NULL;
+  assert(ft_list_size(large_list) == large_size);
+  current = large_list;
+
+  while (current) {
+    next = current->next;
+    free(current);
+    current = next;
+  }
+
+  printf("All ft_list_size tests passed.\n");
+}
+
 int32_t main() {
   test_atoi_base();
+  test_list_size();
 
   return EXIT_SUCCESS;
 }
