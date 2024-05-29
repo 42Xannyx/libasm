@@ -218,12 +218,6 @@ void test_strcpy() {
   assert(strcmp(dest, "   ") == 0);
   assert(dest[3] == '\0');
 
-  // Test 4: Overlapping source and destination (if your implementation supports
-  // it).
-  // ft_strcpy(dest, "Overlap");
-  // ft_strcpy(dest + 2, dest);
-  // assert(strcmp(dest, "OvOvererp") == 0);
-
   printf("All tests passed of ft_strcpy.\n");
 }
 
