@@ -228,10 +228,10 @@ void test_strcpy() {
 }
 
 int32_t main() {
+  test_strcmp();
   test_strlen();
   test_write();
   test_read();
-  test_strcmp();
   test_strdup();
   test_strcpy();
 
