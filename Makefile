@@ -40,7 +40,6 @@ bonus: $(OBJ) $(OBJ_BONUS)
 
 %.o: %.s
 	@echo "Assembling $<..."
-	@mkdir -p $(OBJ_DIR)
 	$(NASM) ${NASMFLAGS} -o $@ $<
 
 $(OBJ_DIR):
@@ -53,14 +52,15 @@ test_bonus: $(NAME) bonus
 	@$(CC) src/bonus.c $(NAME) -I$(HEADERS)} $(CFLAGS) -DBONUS=1
 
 clean:
-	@echo "\n"
-	@echo $(OBJECTS)
-	@rm -rf $(OBJ_DIR)
+	@echo $(OBJ)
+	@echo $(OBJ_BONUS)
+	@find $(SRC_DIR) -type f -name '*.o' -exec rm -f {} +
+	@find $(BONUS_DIR) -type f -name '*.o' -exec rm -f {} +
 	@printf $(REM_MESSAGE)
-	@echo "\n"
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -f a.out
 
 re: fclean all
 
