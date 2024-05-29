@@ -189,89 +189,9 @@ void test_list_size() {
   printf("All ft_list_size tests passed.\n");
 }
 
-void test_list_remove_if() {
-  // Test 1: Remove from an empty list
-  t_list *list = NULL;
-  int value = 42;
-  ft_list_remove_if(&list, &value, cmp_int);
-  assert(list == NULL);
-
-  // // Test 2: Remove the only element in the list
-  // list = malloc(sizeof(t_list));
-  // list->data = &value;
-  // list->next = NULL;
-  // ft_list_remove_if(&list, &value, cmp_int);
-  // assert(list == NULL);
-  //
-  // // Test 3: Remove the head element in the list
-  // int values[] = {1, 2, 3};
-  // list = malloc(sizeof(t_list));
-  // list->data = &values[0];
-  // list->next = malloc(sizeof(t_list));
-  // list->next->data = &values[1];
-  // list->next->next = malloc(sizeof(t_list));
-  // list->next->next->data = &values[2];
-  // list->next->next->next = NULL;
-  // ft_list_remove_if(&list, &values[0], cmp_int);
-  // assert(list != NULL);
-  // assert(*(int *)(list->data) == 2);
-  // assert(*(int *)(list->next->data) == 3);
-  // assert(list->next->next == NULL);
-  // free(list->next);
-  // free(list);
-  //
-  // // Test 4: Remove a middle element in the list
-  // list = malloc(sizeof(t_list));
-  // list->data = &values[0];
-  // list->next = malloc(sizeof(t_list));
-  // list->next->data = &values[1];
-  // list->next->next = malloc(sizeof(t_list));
-  // list->next->next->data = &values[2];
-  // list->next->next->next = NULL;
-  // ft_list_remove_if(&list, &values[1], cmp_int);
-  // assert(list != NULL);
-  // assert(*(int *)(list->data) == 1);
-  // assert(*(int *)(list->next->data) == 3);
-  // assert(list->next->next == NULL);
-  // free(list->next);
-  // free(list);
-  //
-  // // Test 5: Remove the last element in the list
-  // list = malloc(sizeof(t_list));
-  // list->data = &values[0];
-  // list->next = malloc(sizeof(t_list));
-  // list->next->data = &values[1];
-  // list->next->next = malloc(sizeof(t_list));
-  // list->next->next->data = &values[2];
-  // list->next->next->next = NULL;
-  // ft_list_remove_if(&list, &values[2], cmp_int);
-  // assert(list != NULL);
-  // assert(*(int *)(list->data) == 1);
-  // assert(*(int *)(list->next->data) == 2);
-  // assert(list->next->next == NULL);
-  // free(list->next);
-  // free(list);
-  //
-  // // Test 6: Remove all elements in the list
-  // list = malloc(sizeof(t_list));
-  // list->data = &values[0];
-  // list->next = malloc(sizeof(t_list));
-  // list->next->data = &values[1];
-  // list->next->next = malloc(sizeof(t_list));
-  // list->next->next->data = &values[2];
-  // list->next->next->next = NULL;
-  // ft_list_remove_if(&list, &values[0], cmp_int);
-  // ft_list_remove_if(&list, &values[1], cmp_int);
-  // ft_list_remove_if(&list, &values[2], cmp_int);
-  // assert(list == NULL);
-
-  printf("All ft_list_remove_if tests passed.\n");
-}
-
 int32_t main() {
   test_atoi_base();
   test_list_size();
-  test_list_remove_if();
 
   return EXIT_SUCCESS;
 }

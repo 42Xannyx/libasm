@@ -6,7 +6,7 @@ SRC_DIR       = src/assembly/core
 BONUS_DIR     = src/assembly/bonus
 
 SRC           = $(SRC_DIR)/ft_write.s $(SRC_DIR)/ft_read.s $(SRC_DIR)/ft_strlen.s $(SRC_DIR)/ft_strcmp.s $(SRC_DIR)/ft_strdup.s $(SRC_DIR)/ft_strcpy.s
-BONUS					= $(BONUS_DIR)/ft_atoi_base.s $(BONUS_DIR)/ft_list_size.s $(BONUS_DIR)/ft_list_sort.s $(BONUS_DIR)/ft_list_remove_if.s
+BONUS					= $(BONUS_DIR)/ft_atoi_base.s $(BONUS_DIR)/ft_list_size.s
 
 OBJ           = $(SRC:.s=.o)
 OBJ_BONUS     = $(BONUS:.s=.o)

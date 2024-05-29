@@ -16,6 +16,7 @@ The aim of this project is to get familiar with assembly language by implementin
 ### Bonus functions
 
 - `ft_atoi_base`
+- `ft_list_size`
 
 ## Getting Started
 
